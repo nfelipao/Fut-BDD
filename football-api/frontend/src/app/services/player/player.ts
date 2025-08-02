@@ -27,5 +27,7 @@ export class PlayerService {
   getPlayer(id: number): Observable<Player> {
     return this.http.get<Player>(`${this.baseUrl}/${id}`);
   }
+
+  
 }
 
