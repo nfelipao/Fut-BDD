@@ -13,7 +13,8 @@ services:
       - "3306:3306" # Make sure it is the same port as DB_PORT in your .env file'
     volumes:
       - db_data:/var/lib/mysql
-      - ./docker/db:/docker-entrypoint-initdb.d 
+      - ./docker/db:/docker-entrypoint-initdb.d
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf 
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-authentication-plugin=mysql_native_password
 
   backend:
