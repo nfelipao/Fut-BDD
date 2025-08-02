@@ -23,6 +23,7 @@ services:
     container_name: nfelipe_backend
     depends_on:
       - mysql_db
+    restart: on-failure
     env_file:
       - .env
     environment:
@@ -36,7 +37,8 @@ services:
       - /usr/src/app/node_modules
     ports:
       - "3000:3000"
-    command: npm run start:dev
+    command: sh -c "sleep 10 && npm run start:dev"
+
 
   frontend:
     build:
