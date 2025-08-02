@@ -8,7 +8,7 @@ dotenv.config(); // carga el archivo .env si aún no lo hizo
 const sequelizeConfig: SequelizeModuleOptions = {
   dialect: 'mysql',
   host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '3306', 10),
+  port: parseInt(process.env.DB_PORT || '3306', 3306),
   username: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'test',
@@ -16,6 +16,11 @@ const sequelizeConfig: SequelizeModuleOptions = {
   autoLoadModels: true,
   synchronize: true,
   logging: false, // set to true for verbose SQL logs
+  dialectOptions: {
+    charset: 'utf8mb4',
+    collate: 'utf8mb4_unicode_ci',
+  },
+
 };
 
 export default sequelizeConfig;
