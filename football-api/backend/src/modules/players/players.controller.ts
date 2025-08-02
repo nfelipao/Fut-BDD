@@ -10,9 +10,48 @@ import {
 import { PlayersService } from './players.service';
 import { PlayerDto } from './dto/player.dto';
 
+import { Query } from '@nestjs/common';
+
 @Controller('api/players')
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
+
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getPlayers(
+    @Query('page') page = 1,
+    @Query('size') size = 20,
+    @Query('club') club?: string,
+    @Query('position') position?: string,
+  ): Promise <{data: PlayerDto[], total: number; page: number; size: number}> {
+    const pageNumber = Number(page) || 1;
+    const pageSize = Number(size) || 20;
+
+    const {players, total} = await this.playersService.getPlayers({
+      page: pageNumber,
+      size: pageSize,
+      club,
+      position,
+    });
+
+    return {
+      data: players.map(player => new PlayerDto(player)),
+      total,
+      page: pageNumber,
+      size: pageSize,
+    };
+}
+
+  @Get('clubs')
+  async getClubs(): Promise<string[]> {
+    return this.playersService.getAllClubs();
+}
+  @Get('positions')
+  async getPositions(): Promise<string[]> {
+    return this.playersService.getAllPositions();
+  }
+
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
@@ -27,4 +66,5 @@ export class PlayersController {
 
     return new PlayerDto(player);
   }
+
 }

@@ -1,15 +1,31 @@
+<div class="filters">
+<label for="club">Club:</label>
+<select id="club" [(ngModel)]="selectedClub" (change)="onFilterChange()">
+  <option value="">Todos</option>
+  <option *ngFor="let club of clubs" [value]="club">{{ club }}</option>
+</select>
 
-<div class="player-container">
-  <h1>Detalles del Jugador</h1>
-  <p>Selecciona un jugador para ver sus detalles.</p>
-<div *ngIf="player; else noPlayer">
-  <h2>{{ player.name }}<img src="{{ player.playerFaceUrl }}" alt="playerFaceUrl"></h2>
-  <p>Club: {{ player.club }}</p>
-  <p>Posición: {{ player.position }}</p>
-  <p>Nacionalidad: {{ player.nationality }}</p>
-  <p>Rating: {{ player.rating }}</p>
+<label for="position">Posición:</label>
+<select id="position" [(ngModel)]="selectedPosition" (change)="onFilterChange()">
+  <option value="">Todas</option>
+  <option *ngFor="let position of positions" [value]="position">{{ position }}</option>
+</select>
+
 </div>
 
-<ng-template #noPlayer>
-  <p>{{ errorMessage || 'Cargando jugador...' }}</p>
-</ng-template>
+<!-- Lista de jugadores -->
+<ul class="player-list">
+  <li *ngFor="let player of players">
+    <img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50" />
+    {{ player.name }} - {{ player.club }} - {{ player.position }}
+  </li>
+</ul>
+
+<!-- Controles de paginación -->
+<div class="pagination">
+  <button (click)="prevPage()" [disabled]="page === 1">Anterior</button>
+  Página {{ page }}
+  <button (click)="nextPage()" [disabled]="page * size >= total">Siguiente</button>
+</div>
+
+

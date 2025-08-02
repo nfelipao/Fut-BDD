@@ -31,6 +31,56 @@ export class TypeOrmPlayerRepository implements IPlayerRepository {
     return entity;
   }
 
+
+async getAllClubs(): Promise<string[]> {
+  return []; // No lo usás, así que puede estar vacío por ahora
+}
+
+async getAllPositions(): Promise<string[]> {
+  return [];
+}
+
+
+  
+
+  async findAllWithFilters(params: {
+  page: number;
+  size: number;
+  club?: string;
+  position?: string;
+}): Promise<{ players: Player[]; total: number }> {
+  const { page, size, club, position } = params;
+
+  const query = this.playerRepository.createQueryBuilder('player');
+
+  if (club) {
+    query.andWhere('LOWER(player.clubName) LIKE LOWER(:club)', {
+      club: `%${club}%`,
+    });
+  }
+
+  if (position) {
+    query.andWhere('LOWER(player.playerPositions) LIKE LOWER(:position)', {
+      position: `%${position}%`,
+    });
+  }
+
+  const total = await query.getCount();
+
+  const dtos = await query
+    .skip((page - 1) * size)
+    .take(size)
+    .getMany();
+
+  const players = dtos.map((dto) => this.mapToEntity(dto));
+
+  return {
+    players,
+    total,
+  };
+}
+
+
   private mapToEntity(playerDto: PlayerDto): Player {
     const player = new Player();
     player.id = playerDto.id;
@@ -47,4 +97,6 @@ export class TypeOrmPlayerRepository implements IPlayerRepository {
 
     return player;
   }
+
+  
 }
