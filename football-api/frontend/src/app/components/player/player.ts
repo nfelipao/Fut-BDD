@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { PlayerService } from '../../services/player/player';
 import { Player } from '../../services/player/player';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgSelectModule],
   providers: [PlayerService],
   templateUrl: './player.html',
   styleUrls: ['./player.css'],
@@ -120,4 +121,175 @@ export class PlayerComponent implements OnInit {
       });
     }
   }
+  nationalityFlags: { [key: string]: string } = {
+    'Argentina': '🇦🇷',
+    'Brazil': '🇧🇷',
+    'Germany': '🇩🇪',
+    'France': '🇫🇷',
+    'Spain': '🇪🇸',
+    'England': '🏴󠁧󠁢󠁥󠁮󠁧󠁿',
+    'Italy': '🇮🇹',
+    'Netherlands': '🇳🇱',
+    'Portugal': '🇵🇹',
+    'Belgium': '🇧🇪',
+    'Uruguay': '🇺🇾',
+    'Chile': '🇨🇱',
+    'Colombia': '🇨🇴',
+    'Mexico': '🇲🇽',
+    'United States': '🇺🇸 ',
+    'Japan': '🇯🇵',
+    'Korea Republic': '🇰🇷',
+    'Australia': '🇦🇺',
+    'China': '🇨🇳',
+    'Russia': '🇷🇺',
+    'Poland': '🇵🇱',
+    'Sweden': '🇸🇪',
+    'Norway': '🇳🇴',
+    'Denmark': '🇩🇰',
+    'Finland': '🇫🇮',
+    'Greece': '🇬🇷',
+    'Turkey': '🇹🇷',
+    'Egypt': '🇪🇬',
+    'Nigeria': '🇳🇬',
+    'Wales':  '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+    'Croatia': '🇭🇷 ',
+    'Serbia': '🇷🇸',
+    'Côte d\'Ivoire': '🇨🇮',
+    'Senegal': '🇸🇳',
+    'Cameroon': '🇨🇲',
+    'Ghana': '🇬🇭',
+    'South Africa': '🇿🇦',
+    'Morocco': '🇲🇦',
+    'Tunisia': '🇹🇳',
+    'Algeria': '🇩🇿',
+    'Ivory Coast': '🇨🇮',
+    'Mali': '🇲🇱',
+    'Angola': '🇦🇴',
+    'Zambia': '🇿🇲',
+    'Czech Republic': '🇨🇿',
+    'Slovakia': '🇸🇰',
+    'Hungary': '🇭🇺',
+    'Austria': '🇦🇹',
+    'Switzerland': '🇨🇭',
+    'Romania': '🇷🇴',
+    'Bulgaria': '🇧🇬',
+    'Ukraine': '🇺🇦',
+    'Belarus': '🇧🇾',
+    'Lithuania': '🇱🇹',
+    'Latvia': '🇱🇻',
+    'Estonia': '🇪🇪',
+    'Peru': '🇵🇪',
+    'Ecuador': '🇪🇨',
+    'Paraguay': '🇵🇾',
+    'Bolivia': '🇧🇴',
+    'Venezuela': '🇻🇪',
+    'Costa Rica': '🇨🇷',
+    'Panama': '🇵🇦',
+    'Honduras': '🇭🇳',
+    'Guatemala': '🇬🇹',
+    'El Salvador': '🇸🇻',
+    'Nicaragua': '🇳🇮',
+    'Jamaica': '🇯🇲',
+    'Trinidad and Tobago': '🇹🇹',
+    'Barbados': '🇧🇧',
+    'Bahamas': '🇧🇸',
+    'Cuba': '🇨🇺',
+    'Dominican Republic': '🇩🇴',
+    'Puerto Rico': '🇵🇷',
+    'Armenia': '🇦🇲',
+    'Georgia': '🇬🇪',
+    'Azerbaijan': '🇦🇿',
+    'Slovenia': '🇸🇮',
+    'Bosnia and Herzegovina': '🇧🇦',
+    'Montenegro': '🇲🇪',
+    'Togo': '🇹🇬',
+    'Republic of Ireland': '🇮🇪',
+    'Northern Ireland': '🏴󠁧󠁢󠁮󠁩󠁲󠁿',
+    'Gabon': '🇬🇦',
+    'Canada': '🇨🇦',
+    'North Macedonia': '🇲🇰',
+    'Congo': '🇨🇬',
+    'Albania': '🇦🇱',
+    'Benin': '🇧🇯',
+    'Iceland': '🇮🇸',
+    'Guinea': '🇬🇳',
+    'Scotland': '🏴󠁧󠁢󠁳󠁣󠁴󠁿',
+    'Congo DR': '🇨🇩',
+    'Saudi Arabia': '🇸🇦',
+    'Israel': '🇮🇱',
+    'Iran': '🇮🇷',
+    'Iraq': '🇮🇶',
+    'Luxembourg': '🇱🇺',
+    'Philippines': '🇵🇭',
+    'Khazakstan': '🇰🇿',
+    'Kosovo': '🇽🇰',
+    'Faroe Islands': '🇫🇴',
+    'Uganda': '🇺🇬',
+    'Sierra Leone': '🇸🇱',
+    'Antigua and Barbuda': '🇦🇬',
+    'Kenya': '🇰🇪',
+    'Niger': '🇳🇪',
+    'Comoros': '🇰🇲',
+    'Central African Republic': '🇨🇫',
+    'Gambia': '🇬🇲',
+    'Zimbabwe': '🇿🇼',
+    'Saint Lucia': '🇱🇨',
+    'Suriname': '🇸🇷',
+    'Curacao': '🇨🇼',
+    'Liechtenstein': '🇱🇮',
+    'Burundi': '🇧🇮',
+    'Afghanistan': '🇦🇫',
+    'Montserrat': '🇲🇸',
+    'Eritrea': '🇪🇷',
+    'Guyana': '🇬🇾',
+    'Mauritania': '🇲🇷',
+    'Haiti': '🇭🇹',
+    'Burkina Faso': '🇧🇫',
+    'Guinea Bissau': '🇬🇼',
+    'Syria': '🇸🇾',
+    'Cape Verde Islands': '🇨🇻',
+    'Turkmenistan': '🇹🇲',
+    'Grenada': '🇬🇩',
+    'Oman': '🇴🇲',
+    'New Zealand': '🇳🇿',
+    'Malta': '🇲🇹',
+    'Fiji': '🇫🇯',
+    'Mozambique': '🇲🇿',
+}
+
+getRatingClass(rating: number): string {
+  if (rating >= 85) return 'high-rating';
+  if (rating >= 70) return 'medium-rating';
+  return 'low-rating';
+}
+
+
+
+getPositionClass(position: string): string {
+  switch (position) {
+    case 'GK':
+      return 'bg-primary'; // azul
+    case 'CB':
+    case 'LB':
+    case 'RB':
+    case 'LCB':
+    case 'RCB':
+      return 'bg-danger'; // rojo
+    case 'CM':
+    case 'CDM':
+    case 'CAM':
+    case 'LM':
+    case 'RM':
+      return 'bg-warning text-dark'; // amarillo
+    case 'ST':
+    case 'CF':
+    case 'LW':
+    case 'RW':
+      return 'bg-success'; // verde
+    default:
+      return 'bg-secondary'; // gris
+  }
+}
+
+
 }

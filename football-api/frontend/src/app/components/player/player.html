@@ -2,66 +2,95 @@
   <div class="mb-4 row">
 
     <div class="col-md-6 col-lg-4 mb-3">
-      <label for="name" class="form-label">Nombre:</label>
-      <input id="name" type="text" class="form-control" [(ngModel)]="searchName" (input)="onFilterChange()" placeholder="Buscar por nombre..." />
+      <label for="name" class="form-label">Buscar por Nombre:</label>
+      <input id="name" type="text" class="form-control" [(ngModel)]="searchName" (input)="onFilterChange()"
+        placeholder="Buscar por nombre..." />
     </div>
 
     <div class="col-md-3 col-sm-6 mb-2">
-      <label for="club" class="form-label">Club:</label>
-      <select id="club" class="form-select" [(ngModel)]="selectedClub" (change)="onFilterChange()">
-        <option value="">Todos</option>
-        <option *ngFor="let club of clubs" [value]="club">{{ club }}</option>
-      </select>
+      <label for="club" class="form-label">Filtrar por Club:</label>
+      <ng-select [items]="clubs" bindLabel="" bindValue="" placeholder="Todos" [(ngModel)]="selectedClub"
+        (change)="onFilterChange()" [searchable]="true" [clearable]="true" id="club" class="ng-select-dark">
+      </ng-select>
     </div>
 
     <div class="col-md-3 col-sm-6 mb-2">
-      <label for="position" class="form-label">Posición:</label>
-      <select id="position" class="form-select" [(ngModel)]="selectedPosition" (change)="onFilterChange()">
-        <option value="">Todas</option>
-        <option *ngFor="let position of positions" [value]="position">{{ position }}</option>
-      </select>
+      <label for="position" class="form-label">Filtrar por Posición:</label>
+      <ng-select [items]="positions" bindLabel="" bindValue="" placeholder="Todas" [(ngModel)]="selectedPosition"
+        (change)="onFilterChange()" [searchable]="true" [clearable]="true" id="position" class="ng-select-dark">
+      </ng-select>
+    </div>
+
+
+    <div class="table-responsive">
+      <table class="table table-dark table-hover table-striped table-bordered aling-middle">
+        <thead>
+          <tr>
+            <th class="text-center"><i class="bi bi-person-circle fs-3" title="Foto de perfil"></i></th>
+            <th (click)="setSort('name')" class="text-center sortable align-middle">Nombre<i
+                *ngIf="sortColumn === 'name'" class="bi"
+                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+            </th>
+            <th (click)="setSort('club')" class="text-center sortable align-middle">Club<i *ngIf="sortColumn === 'club'"
+                class="bi"
+                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+            </th>
+            <th (click)="setSort('position')" class="text-center sortable align-middle">Posición<i
+                *ngIf="sortColumn === 'position'" class="bi"
+                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+            </th>
+            <th (click)="setSort('nationality')" class="text-center sortable align-middle">Nacionalidad<i
+                *ngIf="sortColumn === 'nationality'" class="bi"
+                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+            </th>
+            <th (click)="setSort('rating')" class="text-center sortable align-middle">Rating<i
+                *ngIf="sortColumn === 'rating'" class="bi"
+                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let player of sortedPlayers">
+            <td class="text-center align-middle"><img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50"
+                class="rounded-circle border border-2" /></td>
+            <td class="text-center align-middle">{{ player.name }}</td>
+            <td class="text-center align-middle">{{ player.club }}</td>
+
+<td class="text-center align-middle">
+  <span [ngClass]="getPositionClass(player.position)" class="badge position-badge">
+    {{ player.position }}
+  </span>
+</td>
+
+
+            <td class="text-center align-middle">
+              {{ nationalityFlags[player.nationality] || '' }} {{ player.nationality }}
+            </td>
+ <td class="text-center align-middle">
+  <div class="rating-circle" [ngClass]="getRatingClass(player.rating)">
+    <svg viewBox="0 0 36 36" class="circular-chart">
+      <path class="circle-bg"
+            d="M18 2.0845
+               a 15.9155 15.9155 0 0 1 0 31.831
+               a 15.9155 15.9155 0 0 1 0 -31.831"/>
+      <path class="circle"
+            [attr.stroke-dasharray]="player.rating + ', 100'"
+            d="M18 2.0845
+               a 15.9155 15.9155 0 0 1 0 31.831
+               a 15.9155 15.9155 0 0 1 0 -31.831"/>
+      <text x="18" y="20.35" class="percentage">{{ player.rating }}</text>
+    </svg>
+  </div>
+</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+      <button class="btn btn-outline-light" (click)="prevPage()" [disabled]="page === 1">Anterior</button>
+      <span>Página {{ page }}</span>
+      <button class="btn btn-outline-light" (click)="nextPage()" [disabled]="page * size >= total">Siguiente</button>
     </div>
   </div>
-
-  <div class="table-responsive">
-    <table class="table table-dark table-hover table-striped table-bordered aling-middle">
-      <thead>
-        <tr>
-          <th class="text-center"><i class="bi bi-person-circle fs-3" title="Foto de perfil"></i></th>
-          <th (click)="setSort('name')" class="text-center sortable align-middle">Nombre<i *ngIf="sortColumn === 'name'" class="bi"
-              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
-          </th>
-          <th (click)="setSort('club')" class="text-center sortable align-middle">Club<i *ngIf="sortColumn === 'club'" class="bi"
-              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
-          </th>
-          <th (click)="setSort('position')" class="text-center sortable align-middle">Posición<i *ngIf="sortColumn === 'position'" class="bi"
-              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
-          </th>
-          <th (click)="setSort('nationality')" class="text-center sortable align-middle">Nacionalidad<i *ngIf="sortColumn === 'nationality'" class="bi"
-              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
-          </th>
-          <th (click)="setSort('rating')" class="text-center sortable align-middle">Rating<i *ngIf="sortColumn === 'rating'" class="bi"
-              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let player of sortedPlayers">
-          <td class="text-center align-middle"><img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50" class="rounded-circle border border-2" /></td>
-          <td class="text-center align-middle">{{ player.name }}</td>
-          <td class="text-center align-middle">{{ player.club }}</td>
-          <td class="text-center align-middle">{{ player.position }}</td>
-          <td class="text-center align-middle">{{ player.nationality }}</td>
-          <td class="text-center align-middle">{{ player.rating }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
-    <button class="btn btn-outline-light" (click)="prevPage()" [disabled]="page === 1">Anterior</button>
-    <span>Página {{ page }}</span>
-    <button class="btn btn-outline-light" (click)="nextPage()" [disabled]="page * size >= total">Siguiente</button>
-  </div>
-</div>
-
