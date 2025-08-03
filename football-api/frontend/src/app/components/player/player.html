@@ -1,31 +1,60 @@
-<div class="filters">
-<label for="club">Club:</label>
-<select id="club" [(ngModel)]="selectedClub" (change)="onFilterChange()">
-  <option value="">Todos</option>
-  <option *ngFor="let club of clubs" [value]="club">{{ club }}</option>
-</select>
+<div class="container-fluid py-4 bg-dark text-white min-vh-100">
+  <div class="mb-4 row">
+    <div class="col-md-3 col-sm-6 mb-2">
+      <label for="club" class="form-label">Club:</label>
+      <select id="club" class="form-select" [(ngModel)]="selectedClub" (change)="onFilterChange()">
+        <option value="">Todos</option>
+        <option *ngFor="let club of clubs" [value]="club">{{ club }}</option>
+      </select>
+    </div>
 
-<label for="position">Posición:</label>
-<select id="position" [(ngModel)]="selectedPosition" (change)="onFilterChange()">
-  <option value="">Todas</option>
-  <option *ngFor="let position of positions" [value]="position">{{ position }}</option>
-</select>
+    <div class="col-md-3 col-sm-6 mb-2">
+      <label for="position" class="form-label">Posición:</label>
+      <select id="position" class="form-select" [(ngModel)]="selectedPosition" (change)="onFilterChange()">
+        <option value="">Todas</option>
+        <option *ngFor="let position of positions" [value]="position">{{ position }}</option>
+      </select>
+    </div>
+  </div>
 
+  <div class="table-responsive">
+    <table class="table table-dark table-hover table-striped table-bordered aling-middle">
+      <thead>
+        <tr>
+          <th>Foto</th>
+          <th (click)="setSort('name')" class="sortable">Nombre<i *ngIf="sortColumn === 'name'" class="bi"
+              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+          </th>
+          <th (click)="setSort('club')" class="sortable">Club<i *ngIf="sortColumn === 'club'" class="bi"
+              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+          </th>
+          <th (click)="setSort('position')" class="sortable">Posición<i *ngIf="sortColumn === 'position'" class="bi"
+              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+          </th>
+          <th (click)="setSort('nationality')" class="sortable">Nacionalidad<i *ngIf="sortColumn === 'nationality'" class="bi"
+              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+          </th>
+          <th (click)="setSort('rating')" class="sortable">Rating<i *ngIf="sortColumn === 'rating'" class="bi"
+              [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let player of sortedPlayers">
+          <td><img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50" class="rounded-circle" /></td>
+          <td>{{ player.name }}</td>
+          <td>{{ player.club }}</td>
+          <td>{{ player.position }}</td>
+          <td>{{ player.nationality }}</td>
+          <td>{{ player.rating }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center gap-3 mt-4">
+    <button class="btn btn-outline-light" (click)="prevPage()" [disabled]="page === 1">Anterior</button>
+    <span>Página {{ page }}</span>
+    <button class="btn btn-outline-light" (click)="nextPage()" [disabled]="page * size >= total">Siguiente</button>
+  </div>
 </div>
-
-<!-- Lista de jugadores -->
-<ul class="player-list">
-  <li *ngFor="let player of players">
-    <img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50" />
-    {{ player.name }} - {{ player.club }} - {{ player.position }}
-  </li>
-</ul>
-
-<!-- Controles de paginación -->
-<div class="pagination">
-  <button (click)="prevPage()" [disabled]="page === 1">Anterior</button>
-  Página {{ page }}
-  <button (click)="nextPage()" [disabled]="page * size >= total">Siguiente</button>
-</div>
-
-

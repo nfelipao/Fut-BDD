@@ -24,6 +24,10 @@ export class PlayerComponent implements OnInit {
   page = 1;
   size = 10;
   total = 0;
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortedPlayers: Player[] = [];
+
 
   constructor(private playerService: PlayerService) { }
 
@@ -42,11 +46,11 @@ export class PlayerComponent implements OnInit {
   }
   getFilterOptions() {
     this.playerService.getClubs().subscribe({
-      next: (data) => this.clubs = data,
+      next: (data) => this.clubs = data.sort((a, b) => a.localeCompare(b)),
     });
 
     this.playerService.getPositions().subscribe({
-      next: (data) => this.positions = data,
+      next: (data) => this.positions = data.sort((a, b) => a.localeCompare(b)),
     });
   }
 
@@ -57,6 +61,7 @@ export class PlayerComponent implements OnInit {
         next: (res) => {
           this.players = res.data;
           this.total = res.total;
+          this.sortPlayers();
         },
         error: () => {
           this.players = [];
@@ -81,6 +86,38 @@ export class PlayerComponent implements OnInit {
     if (this.page > 1) {
       this.page--;
       this.getPlayers();
+    }
+  }
+
+  setSort(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortPlayers();
+  }
+
+  sortPlayers() {
+    this.sortedPlayers = [...this.players];
+    if (this.sortColumn) {
+      this.sortedPlayers.sort((a, b) => {
+        const valueA = a[this.sortColumn as keyof Player];
+        const valueB = b[this.sortColumn as keyof Player];
+
+        if (typeof valueA === 'string' && typeof valueB === 'string') {
+          return this.sortDirection === 'asc'
+            ? valueA.localeCompare(valueB)
+            : valueB.localeCompare(valueA);
+        }
+
+        if (typeof valueA === 'number' && typeof valueB === 'number') {
+          return this.sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+        }
+
+        return 0;
+      });
     }
   }
 }

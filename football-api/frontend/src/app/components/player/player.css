@@ -1,0 +1,21 @@
+th.active {
+  text-decoration: underline;
+  cursor: pointer;
+}
+th {
+  cursor: pointer;
+}
+
+th.fw-bold {
+  text-decoration: underline;
+}
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.sortable i {
+  margin-left: 4px;
+  font-size: 0.9rem;
+}
