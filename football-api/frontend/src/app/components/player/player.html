@@ -1,5 +1,11 @@
 <div class="container-fluid py-4 bg-dark text-white min-vh-100">
   <div class="mb-4 row">
+
+    <div class="col-md-6 col-lg-4 mb-3">
+      <label for="name" class="form-label">Nombre:</label>
+      <input id="name" type="text" class="form-control" [(ngModel)]="searchName" (input)="onFilterChange()" placeholder="Buscar por nombre..." />
+    </div>
+
     <div class="col-md-3 col-sm-6 mb-2">
       <label for="club" class="form-label">Club:</label>
       <select id="club" class="form-select" [(ngModel)]="selectedClub" (change)="onFilterChange()">
@@ -21,32 +27,32 @@
     <table class="table table-dark table-hover table-striped table-bordered aling-middle">
       <thead>
         <tr>
-          <th>Foto</th>
-          <th (click)="setSort('name')" class="sortable">Nombre<i *ngIf="sortColumn === 'name'" class="bi"
+          <th class="text-center"><i class="bi bi-person-circle fs-3" title="Foto de perfil"></i></th>
+          <th (click)="setSort('name')" class="text-center sortable align-middle">Nombre<i *ngIf="sortColumn === 'name'" class="bi"
               [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
           </th>
-          <th (click)="setSort('club')" class="sortable">Club<i *ngIf="sortColumn === 'club'" class="bi"
+          <th (click)="setSort('club')" class="text-center sortable align-middle">Club<i *ngIf="sortColumn === 'club'" class="bi"
               [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
           </th>
-          <th (click)="setSort('position')" class="sortable">Posición<i *ngIf="sortColumn === 'position'" class="bi"
+          <th (click)="setSort('position')" class="text-center sortable align-middle">Posición<i *ngIf="sortColumn === 'position'" class="bi"
               [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
           </th>
-          <th (click)="setSort('nationality')" class="sortable">Nacionalidad<i *ngIf="sortColumn === 'nationality'" class="bi"
+          <th (click)="setSort('nationality')" class="text-center sortable align-middle">Nacionalidad<i *ngIf="sortColumn === 'nationality'" class="bi"
               [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
           </th>
-          <th (click)="setSort('rating')" class="sortable">Rating<i *ngIf="sortColumn === 'rating'" class="bi"
+          <th (click)="setSort('rating')" class="text-center sortable align-middle">Rating<i *ngIf="sortColumn === 'rating'" class="bi"
               [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let player of sortedPlayers">
-          <td><img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50" class="rounded-circle" /></td>
-          <td>{{ player.name }}</td>
-          <td>{{ player.club }}</td>
-          <td>{{ player.position }}</td>
-          <td>{{ player.nationality }}</td>
-          <td>{{ player.rating }}</td>
+          <td class="text-center align-middle"><img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50" class="rounded-circle border border-2" /></td>
+          <td class="text-center align-middle">{{ player.name }}</td>
+          <td class="text-center align-middle">{{ player.club }}</td>
+          <td class="text-center align-middle">{{ player.position }}</td>
+          <td class="text-center align-middle">{{ player.nationality }}</td>
+          <td class="text-center align-middle">{{ player.rating }}</td>
         </tr>
       </tbody>
     </table>
@@ -58,3 +64,4 @@
     <button class="btn btn-outline-light" (click)="nextPage()" [disabled]="page * size >= total">Siguiente</button>
   </div>
 </div>
+

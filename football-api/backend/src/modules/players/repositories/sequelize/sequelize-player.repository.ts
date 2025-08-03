@@ -68,17 +68,23 @@ async getAllPositions(): Promise<string[]> {
     size: number;
     club?: string;
     position?: string;
+    name?: string;
   }): Promise<{ players: Player[]; total: number }> {
-    const { page, size, club, position } = params;
+    const { page, size, club, position, name } = params;
     const offset = (page - 1) * size;
     const limit = size;
 
     const where: any = {};
+
     if (club) {
       where.clubName = club;
     }
     if (position) {
       where.playerPositions = { [Op.like]: `%${position}%` };
+    }
+
+    if (name) {
+      where.longName = { [Op.like]: `%${name}%` };
     }
 
     const { rows, count } = await this.playerModel.findAndCountAll({

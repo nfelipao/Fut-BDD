@@ -19,6 +19,7 @@ export class PlayersService {
     size: number;
     club?: string;
     position?: string;
+    name?: string;
   }): Promise<{ players: Player[]; total: number }> {
     return this.playerRepository.findAllWithFilters(params);
   }

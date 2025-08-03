@@ -24,6 +24,7 @@ export class PlayersController {
     @Query('size') size = 20,
     @Query('club') club?: string,
     @Query('position') position?: string,
+    @Query('name') name?: string,
   ): Promise <{data: PlayerDto[], total: number; page: number; size: number}> {
     const pageNumber = Number(page) || 1;
     const pageSize = Number(size) || 20;
@@ -33,6 +34,7 @@ export class PlayersController {
       size: pageSize,
       club,
       position,
+      name,
     });
 
     return {

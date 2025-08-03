@@ -27,7 +27,7 @@ export class PlayerComponent implements OnInit {
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
   sortedPlayers: Player[] = [];
-
+  searchName: string = '';
 
   constructor(private playerService: PlayerService) { }
 
@@ -56,7 +56,7 @@ export class PlayerComponent implements OnInit {
 
   getPlayers() {
     this.playerService
-      .getPlayers('', this.selectedClub, this.selectedPosition, this.page, this.size)
+      .getPlayers(this.searchName, this.selectedClub, this.selectedPosition, this.page, this.size)
       .subscribe({
         next: (res) => {
           this.players = res.data;
