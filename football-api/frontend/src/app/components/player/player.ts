@@ -22,17 +22,21 @@ export class PlayerComponent implements OnInit {
   positions: string[] = [];
   selectedClub: string = '';
   selectedPosition: string = '';
+  selectedPlayer?: Player;
   page = 1;
   size = 10;
   total = 0;
-  sortColumn: string = '';
+  sortColumn: string | null = null;
   sortDirection: 'asc' | 'desc' = 'asc';
   sortedPlayers: Player[] = [];
   searchName: string = '';
 
   constructor(private playerService: PlayerService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.sortColumn = 'name';
+    this.sortDirection = 'asc';
+
     console.log('PlayerComponent initialized');
     this.playerService.getPlayer(1).subscribe({
       next: (data) => (this.player = data),
@@ -90,20 +94,13 @@ export class PlayerComponent implements OnInit {
     }
   }
 
-  setSort(column: string) {
-    if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-    } else {
-      this.sortColumn = column;
-      this.sortDirection = 'asc';
-    }
-    this.sortPlayers();
-  }
-
   sortPlayers() {
     this.sortedPlayers = [...this.players];
-    if (this.sortColumn) {
-      this.sortedPlayers.sort((a, b) => {
+
+    if (!this.sortColumn) {
+      return }
+
+    this.sortedPlayers.sort((a, b) => {
         const valueA = a[this.sortColumn as keyof Player];
         const valueB = b[this.sortColumn as keyof Player];
 
@@ -119,8 +116,19 @@ export class PlayerComponent implements OnInit {
 
         return 0;
       });
-    }
+    
   }
+
+    setSort(column: string):void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+    this.sortPlayers();
+  }
+
   nationalityFlags: { [key: string]: string } = {
     'Argentina': '🇦🇷',
     'Brazil': '🇧🇷',
@@ -151,7 +159,7 @@ export class PlayerComponent implements OnInit {
     'Turkey': '🇹🇷',
     'Egypt': '🇪🇬',
     'Nigeria': '🇳🇬',
-    'Wales':  '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
+    'Wales': '🏴󠁧󠁢󠁷󠁬󠁳󠁿',
     'Croatia': '🇭🇷 ',
     'Serbia': '🇷🇸',
     'Côte d\'Ivoire': '🇨🇮',
@@ -255,40 +263,54 @@ export class PlayerComponent implements OnInit {
     'Malta': '🇲🇹',
     'Fiji': '🇫🇯',
     'Mozambique': '🇲🇿',
-}
-
-getRatingClass(rating: number): string {
-  if (rating >= 85) return 'high-rating';
-  if (rating >= 70) return 'medium-rating';
-  return 'low-rating';
-}
-
-
-
-getPositionClass(position: string): string {
-  switch (position) {
-    case 'GK':
-      return 'bg-primary'; // azul
-    case 'CB':
-    case 'LB':
-    case 'RB':
-    case 'LCB':
-    case 'RCB':
-      return 'bg-danger'; // rojo
-    case 'CM':
-    case 'CDM':
-    case 'CAM':
-    case 'LM':
-    case 'RM':
-      return 'bg-warning text-dark'; // amarillo
-    case 'ST':
-    case 'CF':
-    case 'LW':
-    case 'RW':
-      return 'bg-success'; // verde
-    default:
-      return 'bg-secondary'; // gris
   }
+
+  getRatingClass(rating: number): string {
+    if (rating >= 85) return 'high-rating';
+    if (rating >= 70) return 'medium-rating';
+    return 'low-rating';
+  }
+
+
+
+  getPositionClass(position: string): string {
+    switch (position) {
+      case 'GK':
+        return 'bg-primary'; // azul
+      case 'CB':
+      case 'LB':
+      case 'RB':
+      case 'LCB':
+      case 'RCB':
+        return 'bg-danger'; // rojo
+      case 'CM':
+      case 'CDM':
+      case 'CAM':
+      case 'LM':
+      case 'RM':
+        return 'bg-warning text-dark'; // amarillo
+      case 'ST':
+      case 'CF':
+      case 'LW':
+      case 'RW':
+        return 'bg-success'; // verde
+      default:
+        return 'bg-secondary'; // gris
+    }
+  }
+
+openPlayerModal(player: Player): void {
+  this.playerService.getPlayer(player.id).subscribe({
+    next: full => {
+      this.selectedPlayer = full;
+      const modalEl = document.getElementById('playerDetailModal');
+      if (modalEl) {
+        const modal = new (window as any).bootstrap.Modal(modalEl);
+        modal.show();
+      }
+    },
+    error: err => console.error(err)
+  });
 }
 
 

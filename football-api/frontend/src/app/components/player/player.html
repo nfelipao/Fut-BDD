@@ -24,65 +24,89 @@
 
     <div class="table-responsive">
       <table class="table table-dark table-hover table-striped table-bordered aling-middle">
+
         <thead>
           <tr>
-            <th class="text-center"><i class="bi bi-person-circle fs-3" title="Foto de perfil"></i></th>
-            <th (click)="setSort('name')" class="text-center sortable align-middle">Nombre<i
-                *ngIf="sortColumn === 'name'" class="bi"
-                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+            <th class="text-center">
+              <i class="bi bi-person-circle fs-3" title="Foto de perfil"></i>
             </th>
-            <th (click)="setSort('club')" class="text-center sortable align-middle">Club<i *ngIf="sortColumn === 'club'"
-                class="bi"
-                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+
+            <th (click)="setSort('name')" class="text-center sortable align-middle" title="Ordenar por Nombre">
+              Nombre
+                <span *ngIf="sortColumn !== 'name'">↕</span>
+                <span *ngIf="sortColumn === 'name' && sortDirection === 'asc'">↑</span>
+                <span *ngIf="sortColumn === 'name' && sortDirection === 'desc'">↓</span>
             </th>
-            <th (click)="setSort('position')" class="text-center sortable align-middle">Posición<i
-                *ngIf="sortColumn === 'position'" class="bi"
-                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+
+            <th (click)="setSort('club')" class="text-center sortable align-middle" title="Ordenar por Club">
+              Club
+                <span *ngIf="sortColumn !== 'club'">↕</span>
+                <span *ngIf="sortColumn === 'club' && sortDirection === 'asc'">↑</span>
+                <span *ngIf="sortColumn === 'club' && sortDirection === 'desc'">↓</span>
             </th>
-            <th (click)="setSort('nationality')" class="text-center sortable align-middle">Nacionalidad<i
-                *ngIf="sortColumn === 'nationality'" class="bi"
-                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+
+            <th (click)="setSort('position')" class="text-center sortable align-middle" title="Ordenar por Posición">
+              Posición
+              <span *ngIf="sortColumn !== 'position'">↕</span>
+              <span *ngIf="sortColumn === 'position' && sortDirection === 'asc'">↑</span>
+              <span *ngIf="sortColumn === 'position' && sortDirection === 'desc'">↓</span>
             </th>
-            <th (click)="setSort('rating')" class="text-center sortable align-middle">Rating<i
-                *ngIf="sortColumn === 'rating'" class="bi"
-                [ngClass]="{'bi-caret-up-fill': sortDirection === 'asc','bi-caret-down-fill': sortDirection === 'desc'}"></i>
+
+            <th (click)="setSort('nationality')" class="text-center sortable align-middle" title="Ordenar por Nacionalidad">
+              Nacionalidad
+              <span *ngIf="sortColumn !== 'nationality'">↕</span>
+              <span *ngIf="sortColumn === 'nationality' && sortDirection === 'asc'">↑</span>
+              <span *ngIf="sortColumn === 'nationality' && sortDirection === 'desc'">↓</span>
             </th>
+
+            <th (click)="setSort('rating')" class="text-center sortable align-middle" title="Ordenar por Rating">
+              Rating
+              <span *ngIf="sortColumn !== 'rating'">↕</span>
+              <span *ngIf="sortColumn === 'rating' && sortDirection === 'asc'">↑</span>
+              <span *ngIf="sortColumn === 'rating' && sortDirection === 'desc'">↓</span>
+            </th>
+<!--
+            <th class="text-center align-middle">Detalle</th>
           </tr>
+        -->
         </thead>
+
+
         <tbody>
-          <tr *ngFor="let player of sortedPlayers">
+          <tr *ngFor="let player of sortedPlayers" (click)="openPlayerModal(player)" class="table-row clickable">
             <td class="text-center align-middle"><img [src]="player.playerFaceUrl" alt="{{ player.name }}" width="50"
                 class="rounded-circle border border-2" /></td>
             <td class="text-center align-middle">{{ player.name }}</td>
             <td class="text-center align-middle">{{ player.club }}</td>
 
-<td class="text-center align-middle">
-  <span [ngClass]="getPositionClass(player.position)" class="badge position-badge">
-    {{ player.position }}
-  </span>
-</td>
+            <td class="text-center align-middle">
+              <span [ngClass]="getPositionClass(player.position)" class="badge position-badge">
+                {{ player.position }}
+              </span>
+            </td>
 
 
             <td class="text-center align-middle">
               {{ nationalityFlags[player.nationality] || '' }} {{ player.nationality }}
             </td>
- <td class="text-center align-middle">
-  <div class="rating-circle" [ngClass]="getRatingClass(player.rating)">
-    <svg viewBox="0 0 36 36" class="circular-chart">
-      <path class="circle-bg"
-            d="M18 2.0845
+            <td class="text-center align-middle">
+              <div class="rating-circle" [ngClass]="getRatingClass(player.rating)">
+                <svg viewBox="0 0 36 36" class="circular-chart">
+                  <path class="circle-bg" d="M18 2.0845
                a 15.9155 15.9155 0 0 1 0 31.831
-               a 15.9155 15.9155 0 0 1 0 -31.831"/>
-      <path class="circle"
-            [attr.stroke-dasharray]="player.rating + ', 100'"
-            d="M18 2.0845
+               a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="circle" [attr.stroke-dasharray]="player.rating + ', 100'" d="M18 2.0845
                a 15.9155 15.9155 0 0 1 0 31.831
-               a 15.9155 15.9155 0 0 1 0 -31.831"/>
-      <text x="18" y="20.35" class="percentage">{{ player.rating }}</text>
-    </svg>
-  </div>
-</td>
-
+               a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <text x="18" y="20.35" class="percentage">{{ player.rating }}</text>
+                </svg>
+              </div>
+            </td>
+<!--Aca puede ir lo de la version de fifa
+            <td class="text-center align-middle">
+              <i class="bi bi-eye-fill text-info"></i>
+            </td>
+          -->
           </tr>
         </tbody>
       </table>
@@ -94,3 +118,66 @@
       <button class="btn btn-outline-light" (click)="nextPage()" [disabled]="page * size >= total">Siguiente</button>
     </div>
   </div>
+
+
+  <!-- Modal -->
+<div class="modal fade" id="playerDetailModal" tabindex="-1" aria-labelledby="playerDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="playerDetailModalLabel">{{ selectedPlayer?.name }}</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body d-flex align-items-center">
+      <div class="fifa-card p-3 border rounded bg-secondary w-100">
+        <!-- FOTO CENTRADA -->
+        <div class="text-center mb-3">
+          <img
+            [src]="selectedPlayer?.playerFaceUrl"
+            alt="{{ selectedPlayer?.name }}"
+            class="rounded-circle border border-2"
+            width="100"
+            height="100"
+          />
+        </div>
+
+        <!-- NOMBRE, CLUB, POSICIÓN, BANDERA -->
+        <h4 class="text-center">{{ selectedPlayer?.name }}</h4>
+        <p class="text-center mb-1">
+          {{ nationalityFlags[selectedPlayer?.nationality || ''] }}
+          {{ selectedPlayer?.nationality }}
+          &mdash; {{ selectedPlayer?.club }}
+        </p>
+        <p class="text-center mb-3">Posición: {{ selectedPlayer?.position }}</p>
+
+        <!-- RATING GRANDE -->
+        <div class="d-flex justify-content-center mb-3">
+          <h2 class="display-6">{{ selectedPlayer?.rating }}</h2>
+        </div>
+        <hr />
+
+        <!-- ESTADÍSTICAS -->
+        <div class="row text-center">
+          <div class="col-3">
+            <strong>Ritmo</strong>
+            <p>{{ selectedPlayer?.speed }}</p>
+          </div>
+          <div class="col-3">
+            <strong>Tiro</strong>
+            <p>{{ selectedPlayer?.shooting }}</p>
+          </div>
+          <div class="col-3">
+            <strong>Dribbling</strong>
+            <p>{{ selectedPlayer?.dribbling }}</p>
+          </div>
+          <div class="col-3">
+            <strong>Pase</strong>
+            <p>{{ selectedPlayer?.passing }}</p>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</div>

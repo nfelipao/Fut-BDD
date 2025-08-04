@@ -1,4 +1,3 @@
-// modules/players/repositories/sequelize/player.model.ts
 import {
   Table,
   Column,
