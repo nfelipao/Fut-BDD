@@ -21,13 +21,9 @@ export class SequelizePlayerRepository implements IPlayerRepository {
 
   async findOneById(id: number): Promise<Player | undefined> {
     const model = await this.playerModel.findByPk(id);
-    if (!model) {
-      return undefined;
-    }
+    if (!model) return undefined;
     return this.mapToEntity(model);
   }
-
-
 
   async getAllClubs(): Promise<string[]> {
   const clubs = await this.playerModel.findAll({
@@ -59,9 +55,6 @@ async getAllPositions(): Promise<string[]> {
 
   return Array.from(uniquePositions);
 }
-
-
-
 
   async findAllWithFilters(params:{
     page: number;
